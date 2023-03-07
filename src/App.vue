@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <h2>app</h2>
+        <router-view></router-view>
     </div>
 </template>
 
@@ -8,6 +8,8 @@
 
 </script>
 
-<style lang='less' scoped>
-
+<style>
+/* .btn {
+    @apply bg-purple-400 text-light-50 ring-0 px-4 py-2 rounded transition-all duration-400 hover: (bg-purple-900 ring-8);
+} */
 </style>
