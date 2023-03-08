@@ -34,7 +34,8 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item class="box">
-                        <el-button type="primary" @click="submitForm(ruleFormRef)" class="btn">登录</el-button>
+                        <el-button type="primary" @click="submitForm(ruleFormRef)" class="btn"
+                            :loading="loading">登录</el-button>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -46,7 +47,12 @@
 import { reactive, ref } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import { login } from '@/services/modules/login.js'
+import { getInfo } from '@/services/modules/userInfo.js'
 import { useRouter } from 'vue-router';
+// import { useCookies } from '@vueuse/integrations/useCookies'
+import { setToken } from '@/hooks/cookies'
+import { notification } from '@/hooks/notice'
+
 
 const ruleFormRef = ref()
 const ruleForm = reactive({
@@ -63,36 +69,40 @@ const rules = reactive({
     ],
 })
 
+const loading = ref(false)
 const router = useRouter()
+// const cookies = useCookies();
 const submitForm = async (formEl) => {
     if (!formEl) return
     await formEl.validate((valid, fields) => {
         if (!valid) return false;
+        loading.value = true;
         login(ruleForm.username, ruleForm.passward)
             .then(res => {
                 console.log(res);
                 // 登录成功提示
-                ElNotification({
-                    title: 'Success',
-                    message: '登录成功',
-                    type: 'success',
-                    duration:3000
-                })
+                // ElNotification({
+                //     message: '登录成功',
+                //     type: 'success',
+                //     duration: 3000
+                // })
+                notification()
 
-                // 保存token
-                const token = res.data.data.token;
-                localStorage.setItem('token', token)
+                // 保存token/cookies
+                // const token = res.data.data.token;
+                // localStorage.setItem('token', token)
+                // cookies.set('token', res.token)
+                setToken(res.token)
+
+                // 获取用户相关信息
+                getInfo().then(res => {
+                    console.log(res);
+                })
 
                 // 页面跳转
                 router.push('/')
-            })
-            .catch(err => {
-                ElNotification({
-                    title: 'Error',
-                    message: err.response.data.msg || '请求失败',
-                    type: 'error',
-                    duration:3000
-                })
+            }).finally(() => {
+                loading.value = false;
             })
     })
 }
