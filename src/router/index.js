@@ -10,6 +10,9 @@ const router = createRouter({
         {
             path: '/home',
             component: () => import('@/views/home/home.vue'),
+            meta: {
+                title:'后台首页'
+            }
         },
         {
             path: '/about',
@@ -22,6 +25,9 @@ const router = createRouter({
         {
             path: '/login',
             component: () => import('@/views/login/login.vue'),
+            meta: {
+                title:'登录页'
+            }
         },
     ],
 });

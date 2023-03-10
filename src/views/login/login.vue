@@ -44,14 +44,15 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref ,onMounted,onBeforeUnmount} from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
-import { login } from '@/services/modules/login.js'
-import { getInfo } from '@/services/modules/userInfo.js'
+// import { login } from '@/services/modules/login.js'
+// import { getInfo } from '@/services/modules/userInfo.js'
 import { useRouter } from 'vue-router';
 // import { useCookies } from '@vueuse/integrations/useCookies'
-import { setToken } from '@/hooks/cookies'
+// import { setToken } from '@/hooks/cookies'
 import { notification } from '@/hooks/notice'
+import useUserInfo from '@/stores/modules/userInfo'
 
 
 const ruleFormRef = ref()
@@ -71,42 +72,69 @@ const rules = reactive({
 
 const loading = ref(false)
 const router = useRouter()
+const userInfo = useUserInfo()
 // const cookies = useCookies();
 const submitForm = async (formEl) => {
     if (!formEl) return
     await formEl.validate((valid, fields) => {
         if (!valid) return false;
         loading.value = true;
-        login(ruleForm.username, ruleForm.passward)
-            .then(res => {
-                console.log(res);
-                // 登录成功提示
-                // ElNotification({
-                //     message: '登录成功',
-                //     type: 'success',
-                //     duration: 3000
-                // })
-                notification()
 
-                // 保存token/cookies
-                // const token = res.data.data.token;
-                // localStorage.setItem('token', token)
-                // cookies.set('token', res.token)
-                setToken(res.token)
+        userInfo.fetchLogin(ruleForm).then(res => {
+            notification()
+            router.push('/')
+        }).finally(() => {
+            loading.value = false;
+        })
 
-                // 获取用户相关信息
-                getInfo().then(res => {
-                    console.log(res);
-                })
+        // login(ruleForm.username, ruleForm.passward)
+        //     .then(res => {
+        //         // console.log(res);
+        //         // 登录成功提示
+        //         // ElNotification({
+        //         //     message: '登录成功',
+        //         //     type: 'success',
+        //         //     duration: 3000
+        //         // })
+        //         notification()
 
-                // 页面跳转
-                router.push('/')
-            }).finally(() => {
-                loading.value = false;
-            })
+        //         // 保存token/cookies
+        //         // const token = res.data.data.token;
+        //         // localStorage.setItem('token', token)
+        //         // cookies.set('token', res.token)
+        //         // setToken(res.token)
+
+        //         // 获取用户相关信息
+        //         // getInfo().then(res => {
+        //         //     const userInfo = useUserInfo();
+        //         //     userInfo.user = res;
+        //         //     // console.log(res);
+        //         // })
+        //         // 在pinia中使用异步函数进行数据请求
+        //         // const userInfo = useUserInfo();
+        //         // userInfo.fetchUserInfo().then(res=>{})
+        //         // 最终将其封装进全局登录守卫中
+
+        //         // 页面跳转
+        //         router.push('/')
+        //     }).finally(() => {
+        //         loading.value = false;
+        //     })
     })
 }
 
+// function fun(e) {
+//     if (e.key == 'Enter') {
+//         console.log(1);
+//         submitForm(ruleFormRef)
+//     }
+// }
+// onMounted(() => {
+//     document.addEventListener('keyup',fun)
+// }),
+// onBeforeUnmount(() => {
+//     document.removeEventListener('keyup',fun)
+// })
 </script>
 
 <style lang='less' scoped>
