@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
-import { getInfo } from '@/services/modules/userInfo.js';
-import { login } from '@/services/modules/login.js';
+import { getInfo,logout,login,changepwd } from '@/services/index.js';
 import { setToken, removeToken } from '@/hooks/cookies';
-import { logout } from '@/services/modules/logout';
 
 const useUserInfo = defineStore('userInfo', {
     state: () => ({
@@ -31,6 +29,10 @@ const useUserInfo = defineStore('userInfo', {
             removeToken();
             this.user = {};
         },
+        async changePassword({ oldPassword, password, rePassword }) {
+            console.log({ oldPassword, password, rePassword });
+            await changepwd(oldPassword, password, rePassword)
+        }
     },
 });
 

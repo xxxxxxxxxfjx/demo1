@@ -5,14 +5,14 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            redirect: '/home',
-        },
-        {
-            path: '/home',
-            component: () => import('@/views/home/home.vue'),
-            meta: {
-                title:'后台首页'
-            }
+            component: () => import('@/components/Layout/layout.vue'),
+            children: [{
+                path: '/',
+                component: () => import('@/views/home/home.vue'),
+                meta: {
+                    title:'后台首页'
+                }
+            }]
         },
         {
             path: '/about',
