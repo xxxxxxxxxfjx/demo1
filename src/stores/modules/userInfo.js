@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia';
-import { getInfo,logout,login,changepwd } from '@/services/index.js';
+import { getInfo, logout, login, changepwd } from '@/services/index.js';
 import { setToken, removeToken } from '@/hooks/cookies';
 
 const useUserInfo = defineStore('userInfo', {
     state: () => ({
         user: {},
+        menus: [],
+        ruleName:[]
     }),
     actions: {
         fetchLogin({ username, passward }) {
@@ -21,17 +23,25 @@ const useUserInfo = defineStore('userInfo', {
         async fetchUserInfo() {
             const res = await getInfo();
             this.user = res;
+            this.getMenus(res.menus)
+            this.getRuleNames(res.ruleNames)
         },
         async fetchLogout() {
             await logout();
+        },
+        async changePassword({ oldPassword, password, rePassword }) {
+            console.log({ oldPassword, password, rePassword });
+            await changepwd(oldPassword, password, rePassword);
         },
         logout() {
             removeToken();
             this.user = {};
         },
-        async changePassword({ oldPassword, password, rePassword }) {
-            console.log({ oldPassword, password, rePassword });
-            await changepwd(oldPassword, password, rePassword)
+        getMenus(payloads) {
+            this.menus = payloads
+        },
+        getRuleNames(payloads) {
+            this.ruleName = payloads
         }
     },
 });

@@ -7,8 +7,9 @@
                 </el-icon>
                 帝莎编程
             </span>
-            <el-icon class="icon-btn">
-                <Fold />
+            <el-icon class="icon-btn" @click="asideClick">
+                <Fold v-if="mainStore.asideWidth == '250px'" />
+                <Expand v-else/>
             </el-icon>
             <el-tooltip effect="dark" content="刷新" placement="bottom">
                 <el-icon class="icon-btn" @click="handleRefresh">
@@ -64,7 +65,7 @@
 </template>
 
 <script setup>
-import { Fold, ElemeFilled, Refresh, FullScreen, ArrowDown, Aim } from '@element-plus/icons-vue'
+import { Fold,Expand, ElemeFilled, Refresh, FullScreen, ArrowDown, Aim } from '@element-plus/icons-vue'
 import useUserInfo from '@/stores/modules/userInfo';
 import { messageBox } from '@/hooks/messageBox'
 import { useRouter } from 'vue-router';
@@ -72,9 +73,11 @@ import { notification } from '@/hooks/notice'
 import { useFullscreen } from '@vueuse/core'
 import formDrawer from '@/components/formDrawer/formDrawer.vue';
 import { useForm } from '@/hooks/submitForm';
+import useMainStore from '@/stores/modules/main.js'
 
 const userInfo = useUserInfo()
 const router = useRouter()
+const mainStore = useMainStore()
 // 全屏切换
 const { isFullscreen, toggle } = useFullscreen()
 
@@ -120,6 +123,9 @@ const handleRefresh = () => {
     location.reload()
 }
 
+const asideClick = () => {
+    mainStore.changeAsideWidth()
+}
 
 
 // const formSize = ref('default')

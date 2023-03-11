@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        {{ userInfo.user }}
+        <h2>home</h2>
     </div>
 </template>
 
