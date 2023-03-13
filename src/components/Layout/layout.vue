@@ -4,7 +4,7 @@
             <f-header></f-header>
         </el-header>
         <el-container>
-            <el-aside :style="{ width: mainStore.asideWidth }">
+            <el-aside :width="mainStore.asideWidth">
                 <f-aside></f-aside>
             </el-aside>
             <el-main>
@@ -26,6 +26,6 @@ const mainStore = useMainStore()
 
 <style lang='less' scoped>
 .el-aside {
-    transition: all .2s;
+    transition: all .1s;
 }
 </style>
