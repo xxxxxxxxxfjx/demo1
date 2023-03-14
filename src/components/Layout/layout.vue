@@ -50,7 +50,7 @@ const mainStore = useMainStore()
     transition: all .5s;
     transition-delay: 0.5s;
 
-}
+} 
 .fade-leave-from {
     opacity: 1;
 }
