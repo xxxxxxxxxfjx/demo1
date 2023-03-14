@@ -66,7 +66,7 @@ const defaultActive = ref(route.path)
     overflow-y: auto;
     overflow-x: hidden;
     box-shadow: 2px 0 5px rgba(0, 0, 0, .05);
-    transition: all .1s;
+    transition: all .2s;
 
     .menu {
         border: none;
