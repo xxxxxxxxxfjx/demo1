@@ -36,7 +36,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter,onBeforeRouteUpdate } from 'vue-router'
 import useMainStore from '@/stores/modules/main.js'
 import useUserInfo from '@/stores/modules/userInfo';
 
@@ -52,7 +52,9 @@ const selectMenu = (e) => {
 const isCollapse = computed(() => !(mainStore.asideWidth == '250px'))
 
 const defaultActive = ref(route.path)
-
+// onBeforeRouteUpdate((to, from) => {
+//         selectMenu(to.path)
+// })
 </script>
 
 <style lang='less' scoped>
