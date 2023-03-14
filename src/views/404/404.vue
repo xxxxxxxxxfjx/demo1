@@ -18,4 +18,11 @@ const btnClick = () => {
 }
 </script>
 
-<style lang='less' scoped></style>
+<style lang='less' scoped>
+.not-found{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>

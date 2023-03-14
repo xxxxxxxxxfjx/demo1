@@ -5,6 +5,8 @@ import { notification } from '@/hooks/notice';
 import useUserInfo from '@/stores/modules/userInfo';
 import { openLoading, closeLoading } from '@/hooks/loading';
 
+let hasGetInfo = false; //防止页面重复加载，导致加载时间过长
+
 router.beforeEach(async (to, from, next) => {
     // 开启loading加载
     openLoading();
@@ -24,9 +26,10 @@ router.beforeEach(async (to, from, next) => {
         return next({ path: from.path ? from.path : '/' });
     }
 
-    if (token) {
+    if (token && !hasGetInfo) {
         let { menus } = await userInfo.fetchUserInfo();
         hasAddNewRoutes = addRoutes(menus);
+        hasGetInfo = true;
     }
 
     // 设置动态标题
