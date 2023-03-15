@@ -1,6 +1,7 @@
 <template>
     <div class="home">
         <el-row :gutter="20">
+            <!-- 骨架屏 -->
             <template v-if="homeStore.panels.length == 0">
                 <el-col :span="6" v-for="i in 4" :key="i">
                     <el-skeleton style="width:100%" animated loading>
@@ -43,6 +44,15 @@
                 </el-card>
             </el-col>
         </el-row>
+        <home-nav></home-nav>
+        <el-row :gutter="20">
+            <el-col :span="12">
+                <home-bar-chart></home-bar-chart>
+            </el-col>
+            <el-col :span="12">
+
+            </el-col>
+        </el-row>
     </div>
 </template>
 
@@ -51,10 +61,12 @@ import { useRouter } from 'vue-router';
 import useUserInfo from '@/stores/modules/userInfo';
 import useHomeStore from '@/stores/modules/home'
 import Gsap from '@/components/gsap/gsap.vue'
+import HomeNav from '@/components/homeNav/home-nav.vue'
+import HomeBarChart from "@/views/home/cpns/homeBarChart.vue"
 
-const homeStore = useHomeStore()
-const userInfo = useUserInfo()
-homeStore.fetchStatistics1()
+const homeStore = useHomeStore();
+const userInfo = useUserInfo();
+homeStore.fetchStatistics1();
 
 </script>
 
@@ -81,4 +93,5 @@ homeStore.fetchStatistics1()
         color: #6b7280;
     }
 }
+
 </style>

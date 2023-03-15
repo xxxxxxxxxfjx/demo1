@@ -1,5 +1,5 @@
 <template>
-    {{ count.num }}
+    {{ count.num.toFixed(0) }}
 </template>
 
 <script setup>
