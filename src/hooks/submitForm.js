@@ -9,7 +9,7 @@ export function useForm() {
 
     const formDrawerRef = ref();
     const formSize = ref('default');
-    const ruleFormRef = ref();
+    const ruleFormRef = ref(null);
     const ruleForm = reactive({
         oldPassword: '',
         password: '',

@@ -1,5 +1,5 @@
 <template>
-    <el-card class="box-card" shadow="never">
+    <el-card class="box-card" shadow="never" v-permission="['getStatistics3,GET']">
         <template #header>
             <div class="card-header">
                 <span>订单统计</span>
@@ -41,10 +41,13 @@ const handleChoose = (type) => {
     getData()
 };
 let myChart = null;
+let chartDom = null;
 onMounted(() => {
-    const chartDom = document.getElementById('barChart');
-    myChart = echarts.init(chartDom);
-    getData();
+    chartDom = document.getElementById('barChart');
+    if (chartDom) {
+        myChart = echarts.init(chartDom);
+        getData();
+    }
 })
 onBeforeUnmount(() => {
     myChart.dispose()
@@ -81,7 +84,9 @@ function getData() {
 }
 
 useResizeObserver(el, (entries) => {
-    myChart.resize()
+    if (chartDom) {
+        myChart.resize()
+    }
 })
 
 
@@ -90,7 +95,6 @@ useResizeObserver(el, (entries) => {
 
 <style lang='less' scoped>
 .box-card {
-    margin-top: 25px;
 
     .card-header {
         display: flex;

@@ -33,11 +33,13 @@ router.beforeEach(async (to, from, next) => {
     }
 
     // 设置动态标题
-    let title = (to.meta.title ? to.meta.title : '') + '-冯某璇的后台商城';
+    let title = (to.meta.title ? to.meta.title : '') + '-后台商城';
     document.title = title;
 
     hasAddNewRoutes ? next(to.fullPath) : next();
 });
+
+
 router.afterEach((to, from) => {
     // 关闭loading加载
     closeLoading();

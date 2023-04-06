@@ -13,3 +13,8 @@ export function getStatistics3(type) {
         }
     })
 }
+export function getStatistics2() {
+    return Request.get({
+        url: 'admin/statistics2',
+    })
+}

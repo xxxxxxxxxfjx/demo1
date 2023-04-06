@@ -52,9 +52,7 @@ const selectMenu = (e) => {
 const isCollapse = computed(() => !(mainStore.asideWidth == '250px'))
 
 const defaultActive = ref(route.path)
-// onBeforeRouteUpdate((to, from) => {
-//         selectMenu(to.path)
-// })
+
 </script>
 
 <style lang='less' scoped>
@@ -67,6 +65,7 @@ const defaultActive = ref(route.path)
     overflow-x: hidden;
     box-shadow: 2px 0 5px rgba(0, 0, 0, .05);
     transition: all .2s;
+    background-color: var(--color-white);
 
     .menu {
         border: none;

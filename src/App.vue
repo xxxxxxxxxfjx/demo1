@@ -1,7 +1,5 @@
 <template>
-    <div class="app">
-        <router-view></router-view>
-    </div>
+    <router-view></router-view>
 </template>
 
 <script setup>
@@ -13,4 +11,5 @@
     background-color: #f4f4f4 !important;
     height: 3px !important;
 }
+
 </style>

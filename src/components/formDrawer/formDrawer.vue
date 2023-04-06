@@ -1,11 +1,7 @@
 <template>
     <div class="drawer">
-        <el-drawer v-model="showDrawer" 
-                :title="title" 
-                :with-header="true" 
-                :close-on-click-modal="false" 
-                :size="size" 
-                :destroy-on-close="destroyOnClose">
+        <el-drawer v-model="showDrawer" :title="title" :with-header="true" :close-on-click-modal="false" :size="size"
+            :destroy-on-close="destroyOnClose" @close="closeDrawer">
             <div class="form">
                 <div class="body">
                     <slot></slot>
@@ -41,9 +37,14 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'reset'])
 const submit = () => emit('submit')
-const reset = () => showDrawer.value = false;
+const reset = () => emit('reset');
+
+// 点击x关闭该窗口
+const closeDrawer = () => {
+    reset()
+}
 
 function open() {
     showDrawer.value = true;

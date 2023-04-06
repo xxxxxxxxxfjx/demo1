@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <el-row :gutter="20">
+        <el-row :gutter="20" class="one">
             <!-- 骨架屏 -->
             <template v-if="homeStore.panels.length == 0">
                 <el-col :span="6" v-for="i in 4" :key="i">
@@ -50,7 +50,8 @@
                 <home-bar-chart></home-bar-chart>
             </el-col>
             <el-col :span="12">
-
+                <home-goods-order class=" mb-5" :title="'店铺及商品提示'" :tip="'店铺及商品提示'" :values="goods"></home-goods-order>
+                <home-goods-order :title="'交易提示'" :tip="'需要立即处理的交易订单'" :values="order"></home-goods-order>
             </el-col>
         </el-row>
     </div>
@@ -61,16 +62,24 @@ import { useRouter } from 'vue-router';
 import useUserInfo from '@/stores/modules/userInfo';
 import useHomeStore from '@/stores/modules/home'
 import Gsap from '@/components/gsap/gsap.vue'
-import HomeNav from '@/components/homeNav/home-nav.vue'
-import HomeBarChart from "@/views/home/cpns/homeBarChart.vue"
-
+import HomeNav from './cpns/homeNav.vue'
+import HomeBarChart from "./cpns/homeBarChart.vue"
+import HomeGoodsOrder from './cpns/homeGoodsOrder.vue'
+import { storeToRefs } from 'pinia';
 const homeStore = useHomeStore();
+const { goods, order } = storeToRefs(homeStore);
+
 const userInfo = useUserInfo();
 homeStore.fetchStatistics1();
+homeStore.fetchStatistics2();
 
 </script>
 
 <style lang='less' scoped>
+.home>.el-row:not(.one) {
+    margin-top: 25px;
+}
+
 .box-card {
     .card-header {
         display: flex;
@@ -93,5 +102,4 @@ homeStore.fetchStatistics1();
         color: #6b7280;
     }
 }
-
 </style>

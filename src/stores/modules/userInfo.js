@@ -34,7 +34,6 @@ const useUserInfo = defineStore('userInfo', {
             await logout();
         },
         async changePassword({ oldPassword, password, rePassword }) {
-            console.log({ oldPassword, password, rePassword });
             await changepwd(oldPassword, password, rePassword);
         },
         logout() {

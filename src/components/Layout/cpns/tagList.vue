@@ -40,7 +40,7 @@ const { actionTab, tabLIst, changTab, removeTab, closeTabs } = useTabList();
     top: 64px;
     right: 0;
     height: 44px;
-    z-index: 100;
+    z-index: 999;
     background-color: #f3f4f6;
     padding: 0 4px;
 

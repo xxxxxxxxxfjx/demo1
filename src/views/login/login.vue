@@ -14,7 +14,8 @@
                     <span class="text">账号密码登录</span>
                     <span class="line"></span>
                 </div>
-                <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" class="form">
+                <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" class="form" @submit.native.prevent
+                    @keyup.enter.native="submitForm(ruleFormRef)">
                     <el-form-item prop="username">
                         <el-input v-model="ruleForm.username" placeholder="请输入用户名">
                             <template #prefix>
@@ -44,7 +45,7 @@
 </template>
 
 <script setup>
-import { reactive, ref ,onMounted,onBeforeUnmount} from 'vue'
+import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 // import { login } from '@/services/modules/login.js'
 // import { getInfo } from '@/services/modules/userInfo.js'
@@ -123,18 +124,19 @@ const submitForm = async (formEl) => {
     })
 }
 
-// function fun(e) {
-//     if (e.key == 'Enter') {
-//         console.log(1);
-//         submitForm(ruleFormRef)
-//     }
-// }
-// onMounted(() => {
-//     document.addEventListener('keyup',fun)
-// }),
-// onBeforeUnmount(() => {
-//     document.removeEventListener('keyup',fun)
-// })
+function fun(e) {
+    if (e.key == 'Enter') {
+        console.log(1);
+        submitForm(ruleFormRef)
+    }
+}
+onMounted(() => {
+    document.addEventListener('keyup', fun)
+}),
+    onBeforeUnmount(() => {
+        document.removeEventListener('keyup', fun)
+    })
+//TODO:回车登录事件存在Bug
 </script>
 
 <style lang='less' scoped>
