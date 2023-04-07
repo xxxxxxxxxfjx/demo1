@@ -10,17 +10,18 @@ import {
 } from '@/services/modules/image.js';
 const useImageStore = defineStore('imageStore', {
     state: () => ({
-        imgList: [],
+        imageCategoryList: [],
         images: [],
-        totalCount: 0,
         currentId: 0,
+        categoryTotalCount: 0,
+        imagesTotalCount: 0,
     }),
     actions: {
-        async fetchImageList(page) {
+        async fetchImageCategoryList(page) {
             const res = await getImageList(page);
-            this.imgList = res.list;
-            this.totalCount = res.totalCount;
-            return res;
+            this.imageCategoryList = res.list;
+            this.categoryTotalCount = res.totalCount;
+            return res.list[0];
         },
         async fetchAddImgCategory(name, order) {
             return await addImageCategory(name, order);
@@ -34,7 +35,7 @@ const useImageStore = defineStore('imageStore', {
         async fetchImages(id, page) {
             const res = await getImages(id, page);
             this.images = res.list;
-            return res;
+            this.imagesTotalCount = res.totalCount;
         },
         getCurrentId(id) {
             this.currentId = id;

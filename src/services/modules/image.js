@@ -8,7 +8,6 @@ export function getImageList(page) {
 }
 
 export function addImageCategory(name, order) {
-    console.log(order);
     return Request.post({
         url: 'admin/image_class',
         params: {

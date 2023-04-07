@@ -1,107 +1,178 @@
 <template>
-    <el-aside width="220px" class="asideContent" v-loading="loading">
+    <el-aside width="220px" v-loading="loading">
         <div class="top">
-            <template v-for="(item, index) in imgList" :key="index">
-                <image-aside @edit="edit(item)" @delete="deleteItem(item.id)" :active="currentIndex == item.id"
-                    @click="itemClick(item)">{{ item.name }}</image-aside>
+            <template v-for="(item, index) in imageCategoryList" :key="item.id">
+                <div class="list" :class="{ active: item.id == currentId }" @click="listClick(item)">
+                    <span class="text">{{ item.name }}</span>
+                    <el-button color="none" class="left" @click="editList(item)">
+                        <el-icon color="skyblue">
+                            <Edit />
+                        </el-icon>
+                    </el-button>
+                    <el-popconfirm title="是否要删除该分类？" @confirm="deleteList(item)" confirm-button-text="确认"
+                        cancel-button-text="取消" width="180">
+                        <template #reference>
+                            <el-button color="transparent">
+                                <el-icon color="skyblue">
+                                    <Close />
+                                </el-icon>
+                            </el-button>
+                        </template>
+                    </el-popconfirm>
+                </div>
             </template>
         </div>
         <div class="footer">
-            <el-pagination background layout="prev, next" :total="totalCount" :page-size="limit"
-                @current-change="getdata" />
+            <el-pagination background layout="prev, next" :total="categoryTotalCount" :page-size="limit" :current-page="currentPage"
+                @current-change="getData" />
         </div>
+        <form-drawer ref="formDrawerRef" :title="title" @reset="resetForm(formRef)" @submit="formSubmit(formRef)">
+            <el-form :model="form" label-width="80px" :rules="rules" ref="formRef">
+                <el-form-item label="相册名称" prop="name">
+                    <el-input v-model="form.name" />
+                </el-form-item>
+                <el-form-item label="排序">
+                    <el-input-number v-model="form.order" :min="1" />
+                </el-form-item>
+            </el-form>
+        </form-drawer>
     </el-aside>
 </template>
 
 <script setup>
-import ImageAside from '@/components/ImageAside.vue'
-import useImageStore from '@/stores/modules/image';
-import { storeToRefs } from 'pinia';
-import { computed, ref, watch } from 'vue';
-import { notification } from '@/hooks/notice';
+import useImageStore from "@/stores/modules/image";
+import { storeToRefs } from "pinia";
+import { computed, reactive, ref, watch } from "vue";
+import FormDrawer from '@/components/formDrawer/formDrawer.vue'
+import { notification } from "@/hooks/notice"
+
+const formDrawerRef = ref(null);
+const loading = ref(false);
+
+// 表单
+const formRef = ref(null);
+const form = reactive({
+    name: '',
+    order: 50,
+});
+const rules = reactive({
+    name: [
+        { required: true, message: '相册名称不能为空', trigger: 'blur' },
+    ],
+})
 
 
-// 分页设置
+// 侧边aside
 const currentPage = ref(1);
-const limit = ref(10);
-
-// 动画
-const loading = ref(false)
+const limit = ref(10)
+const currentId = ref(0);
 const imageStore = useImageStore();
+const { imageCategoryList, categoryTotalCount } = storeToRefs(imageStore);
+const editId = ref(0);
+const title = computed(() => editId.value ? '修改' : '新增');
 
-// 请求数据
-function getdata(p = null) {
-    if (typeof p == 'number') {
-        currentPage.value = p;
+// 监听currentId的变化存入store中
+watch(() => currentId.value, newValue => {
+    imageStore.currentId = newValue;
+})
+
+// 保持组件中不存数据的思路 
+// 获取图片分类列表数据
+const getData = (page) => {
+    if (typeof page == 'number') {
+        currentPage.value = page;
     }
     loading.value = true;
-    imageStore.fetchImageList(currentPage.value).finally(() => {
+    imageStore.fetchImageCategoryList(currentPage.value).then(res => {
+        currentId.value = res.id;
+    }).finally(() => {
         loading.value = false;
     })
 }
-getdata();
+getData()
 
-const { imgList, totalCount } = storeToRefs(imageStore);
-const currentIndex = ref(0);
+const listClick = (item) => {
+    currentId.value = item.id;
 
-// 一开始请求数据慢
-watch(() => imgList, newValue => {
-    currentIndex.value = newValue.value[0].id;
-}, {
-    deep: true
-})
-
-// 切换选中tab
-const itemClick = (item) => {
-    currentIndex.value = item.id;
 }
 
-const emit = defineEmits(['editAside']);
-
-
-//TODO:这里使用了两次emit 代码效率不高 并且后期将抽屉组件移植到该组件中
-// 编辑
-const edit = (obj) => {
-    emit('editAside', obj);
+// 新增图片分类
+const open = () => {
+    formDrawerRef.value.open()
 }
 
-// 删除
-const deleteItem = (id) => {
-    imageStore.fetchDeleteImgCategory(id)
+// 修改分类列表数据
+const editList = (item) => {
+    editId.value = item.id;
+    form.name = item.name;
+    form.order = item.order;
+    formDrawerRef.value.open();
+}
+
+// 删除图片分类
+const deleteList = (item) => {
+    // console.log(item);
+    loading.value = true;
+    imageStore.fetchDeleteImgCategory(item.id)
         .then(res => {
-            notification('成功删除');
-            getdata(currentPage.value);
+            notification('图片分类删除成功')
+            getData();
+        }).catch(err => {
+            console.log(err);
         }).finally(() => {
             loading.value = false;
         })
 }
 
-
-// 暴露刷新方法给父组件
-function refresh(p = null) {
-    if (typeof p == 'number') {
-        currentPage.value = p;
-    }
-    getdata(currentPage.value)
+// 表单关闭和取消并重置内容
+const resetForm = (formEl) => {
+    if (!formEl) return
+    formEl.resetFields()
+    formDrawerRef.value.close()
+    editId.value = 0;
 }
 
-watch(() => currentIndex.value, (newValue) => {
-    imageStore.getCurrentId(newValue);
-})
+// 在成功提交之后要恢复默认值，并关闭窗口
+const successSubmit = () => {
+    form.name = '';
+    form.order = 50;
+    editId.value = 0;
+    formDrawerRef.value.close()
+}
+// 提交表单
+const formSubmit = async (formEl) => {
+    if (!formEl) return;
+    formEl.validate((valid, fields) => {
+        if (valid) {
+            formDrawerRef.value.showLoading()
+            const fun = editId.value ? imageStore.fetchEditImgCategory(editId.value, form.name, form.order) :
+                imageStore.fetchAddImgCategory(form.name, form.order);
+            fun
+                .then(res => {
+                    notification(`${title.value}图片分类成功`);
+                    successSubmit();
+                    getData();
+                })
+                .catch(err => {
+                    console.log(err);
+                }).finally(() => {
+                    formDrawerRef.value.hideLoading()
+                })
+        } else {
+            return false;
+        }
+    })
+}
 
 defineExpose({
-    refresh
+    open
 })
-
-
-
-
 </script>
 
 <style lang='less' scoped>
-.asideContent {
+.el-aside {
     position: relative;
-    border-right: 1px solid #eee;
+    border-right: 1px solid #f4f4f4;
 
     .top {
         position: absolute;
@@ -110,11 +181,36 @@ defineExpose({
         right: 0;
         bottom: 50px;
         overflow-y: auto;
+
+        .list {
+            display: flex;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #f4f4f4;
+            font-size: 14px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: rgb(239, 246, 255);
+            }
+
+            .left {
+                margin-left: auto;
+            }
+
+            .text {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap
+            }
+        }
     }
 
     .footer {
         position: absolute;
-        bottom: 0px;
+        bottom: 0;
         left: 0;
         right: 0;
         height: 50px;
@@ -122,5 +218,15 @@ defineExpose({
         justify-content: center;
         align-items: center;
     }
+}
+
+.el-button {
+    border: none;
+    --el-button-hover-bg-color: none !important;
+    --el-button-active-bg-color: none !important;
+}
+
+.active {
+    background-color: rgb(239, 246, 255);
 }
 </style>
