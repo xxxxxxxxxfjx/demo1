@@ -9,26 +9,16 @@ const useUserInfo = defineStore('userInfo', {
         ruleName: [],
     }),
     actions: {
-        fetchLogin({ username, passward }) {
-            return new Promise((resolve, reject) => {
-                login(username, passward)
-                    .then(res => {
-                        setToken(res.token);
-                        resolve(res);
-                    })
-                    .catch(err => reject(err));
-            });
+        async fetchLogin({ username, passward }) {
+            const res = await login(username, passward);
+            setToken(res.token);
         },
-
-        fetchUserInfo() {
-            return new Promise((resolve, reject) => {
-                getInfo().then(res => {
-                    this.user = res;
-                    this.getMenus(res.menus);
-                    this.getRuleNames(res.ruleNames);
-                    resolve(res)
-                }).catch(err=>reject(err));
-            });
+        async fetchUserInfo() {
+            const res = await getInfo();
+            this.user = res;
+            this.menus = res.menus;
+            this.ruleName = res.ruleNames;
+            return res;
         },
         async fetchLogout() {
             await logout();
@@ -39,12 +29,6 @@ const useUserInfo = defineStore('userInfo', {
         logout() {
             removeToken();
             this.user = {};
-        },
-        getMenus(payloads) {
-            this.menus = payloads;
-        },
-        getRuleNames(payloads) {
-            this.ruleName = payloads;
         },
     },
 });

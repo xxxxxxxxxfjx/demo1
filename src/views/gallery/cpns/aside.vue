@@ -9,22 +9,25 @@
                             <Edit />
                         </el-icon>
                     </el-button>
-                    <el-popconfirm title="是否要删除该分类？" @confirm="deleteList(item)" confirm-button-text="确认"
-                        cancel-button-text="取消" width="180">
-                        <template #reference>
-                            <el-button color="transparent">
-                                <el-icon color="skyblue">
-                                    <Close />
-                                </el-icon>
-                            </el-button>
-                        </template>
-                    </el-popconfirm>
+                    <!-- span里面的点击事件是用来阻止冒泡事件的发生的 -->
+                    <span @click.stop="() => ({})">
+                        <el-popconfirm title="是否要删除该分类？" @confirm="deleteList(item)" confirm-button-text="确认"
+                            cancel-button-text="取消" width="180">
+                            <template #reference>
+                                <el-button color="transparent">
+                                    <el-icon color="skyblue">
+                                        <Close />
+                                    </el-icon>
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
+                    </span>
                 </div>
             </template>
         </div>
         <div class="footer">
-            <el-pagination background layout="prev, next" :total="categoryTotalCount" :page-size="limit" :current-page="currentPage"
-                @current-change="getData" />
+            <el-pagination background layout="prev, next" :total="categoryTotalCount" :page-size="limit"
+                :current-page="currentPage" @current-change="getData" />
         </div>
         <form-drawer ref="formDrawerRef" :title="title" @reset="resetForm(formRef)" @submit="formSubmit(formRef)">
             <el-form :model="form" label-width="80px" :rules="rules" ref="formRef">

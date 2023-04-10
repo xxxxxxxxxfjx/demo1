@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
+import { reactive, ref } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 // import { login } from '@/services/modules/login.js'
 // import { getInfo } from '@/services/modules/userInfo.js'
@@ -124,19 +124,6 @@ const submitForm = async (formEl) => {
     })
 }
 
-function fun(e) {
-    if (e.key == 'Enter') {
-        console.log(1);
-        submitForm(ruleFormRef)
-    }
-}
-onMounted(() => {
-    document.addEventListener('keyup', fun)
-}),
-    onBeforeUnmount(() => {
-        document.removeEventListener('keyup', fun)
-    })
-//TODO:回车登录事件存在Bug
 </script>
 
 <style lang='less' scoped>

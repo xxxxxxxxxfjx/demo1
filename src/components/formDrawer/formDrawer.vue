@@ -40,7 +40,7 @@ const props = defineProps({
 const emit = defineEmits(['submit', 'reset'])
 const submit = () => emit('submit')
 
-// 关闭和取消都重置
+// 点击取消
 const reset = () => emit('reset');
 
 // 点击x关闭该窗口
