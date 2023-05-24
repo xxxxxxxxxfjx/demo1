@@ -34,7 +34,7 @@ const useImageStore = defineStore('imageStore', {
         },
         async fetchImages(id, page) {
             const res = await getImages(id, page);
-            this.images = res.list;
+            this.handleImages(res.list)
             this.imagesTotalCount = res.totalCount;
         },
         getCurrentId(id) {
@@ -45,6 +45,9 @@ const useImageStore = defineStore('imageStore', {
         },
         async fetchDeleteImage(id) {
             return await deleteImage(id);
+        },
+        handleImages(list) {
+            this.images = list.map(item=>({...item,checked:false}))
         },
     },
 });

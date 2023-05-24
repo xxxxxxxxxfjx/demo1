@@ -1,4 +1,5 @@
 <template>
+    <!-- //TODO:tag的左右padding不一致 -->
     <div class="tag-list" :style="{ left: mainStore.asideWidth }">
         <el-tabs v-model="actionTab" type="card" class="demo-tabs" @tab-remove="removeTab" @tab-change="changTab"
             style="min-width: 100px;">

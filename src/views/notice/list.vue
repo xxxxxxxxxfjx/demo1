@@ -42,6 +42,7 @@ import { storeToRefs } from 'pinia';
 import FormDrawer from '@/components/formDrawer/formDrawer.vue';
 import { notification } from '@/hooks/notice'
 
+//TODO:公告模块中的高度存在bug，设置一个定死的高度
 const noticeStore = useNoticeStore();
 const { notices, noticeCount } = storeToRefs(noticeStore);
 const editId = ref(0);

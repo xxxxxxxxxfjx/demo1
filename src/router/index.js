@@ -85,26 +85,45 @@ const asyncRoutes = [
         meta: {
             title: '图库管理',
         },
-    },{
+    },
+    {
         path: '/notice/list',
         name: '/notice/list',
         component: () => import('@/views/notice/list.vue'),
         meta: {
             title: '公告管理',
         },
-    },{
+    },
+    {
         path: '/setting/base',
         name: '/setting/base',
         component: () => import('@/views/setting/base.vue'),
         meta: {
             title: '基础配置',
         },
-    },{
+    },
+    {
         path: '/coupon/list',
         name: '/coupon/list',
         component: () => import('@/views/coupon/list.vue'),
         meta: {
             title: '优惠券管理',
+        },
+    },
+    {
+        path: '/manager/list',
+        name: '/manager/list',
+        component: () => import('@/views/manager/list.vue'),
+        meta: {
+            title: '管理员管理',
+        },
+    },
+    {
+        path: '/access/list',
+        name: '/access/list',
+        component: () => import('@/views/access/list.vue'),
+        meta: {
+            title: '权限管理',
         },
     },
 ];

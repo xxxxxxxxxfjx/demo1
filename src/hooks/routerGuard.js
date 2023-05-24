@@ -26,6 +26,7 @@ router.beforeEach(async (to, from, next) => {
         return next({ path: from.path ? from.path : '/' });
     }
 
+    // token存在 但是没有获取到用户信息
     if (token && !hasGetInfo) {
         let { menus } = await userInfo.fetchUserInfo();
         hasAddNewRoutes = addRoutes(menus);

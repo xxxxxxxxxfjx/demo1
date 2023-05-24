@@ -4,11 +4,14 @@
             <el-row>
                 <template v-for="(item, index) in images" :key="item.id">
                     <el-col :span="6" style="padding:10px 10px">
-                        <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                            <el-image style="width: 100%; height: 150px;cursor:pointer" :src="item.url" fit="cover" />
+                        <el-card :body-style="{ padding: '0px' }" shadow="hover" :class="{choose:item.checked}">
+                            <el-image style="width: 100%; height: 150px;cursor:pointer" :src="item.url" fit="cover"
+                                :preview-src-list="[item.url]" :initial-index="0" />
                             <div class="box">
                                 <span class="text">{{ item.name }}</span>
                                 <div class="bottom">
+                                    <el-checkbox v-if="route.path == '/manager/list'" v-model="item.checked"
+                                        @change="handleChange(item)"></el-checkbox>
                                     <el-button text class="button" type="primary" @click="rename(item)">重命名</el-button>
                                     <el-popconfirm title="是否要删除该图片?" confirm-button-text="确认" cancel-button-text="取消"
                                         width="180" @confirm="deleteImage(item)">
@@ -52,7 +55,10 @@ import { getToken } from '@/hooks/cookies';
 import { uploadActionUrl } from '@/services/modules/image'
 import { notification } from '@/hooks/notice'
 import { messageRename } from '@/hooks/messageBox';
+import { useRoute } from 'vue-router'
 
+const emit = defineEmits(['choose'])
+const route = useRoute()
 const currentPage = ref(1)
 const imageStore = useImageStore();
 const loading = ref(false);
@@ -123,6 +129,17 @@ const rename = (item) => {
 }
 
 const open = () => show.value = true;
+
+const chooseImg = computed(() => images.value.filter(d => d.checked))
+const handleChange = (item) => {
+    if (item.checked && chooseImg.value.length > 1) {
+        notification('只能选择一张图片', 'error')
+        item.checked = false;
+        return
+    }
+    emit('choose',chooseImg.value)
+}
+
 defineExpose({
     open
 })
@@ -181,5 +198,8 @@ defineExpose({
     border: none;
     --el-button-hover-bg-color: none !important;
     --el-button-active-bg-color: none !important;
+}
+.choose{
+    border: 1px solid #000;
 }
 </style>
