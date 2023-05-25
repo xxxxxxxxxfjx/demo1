@@ -13,14 +13,7 @@
                 <el-button size="small" @click="reset">重置</el-button>
             </el-col>
         </el-row>
-        <div class="header">
-            <el-button type="primary" size="small" @click="createManager">新增</el-button>
-            <el-button style="border:none">
-                <el-icon size="small">
-                    <Refresh />
-                </el-icon>
-            </el-button>
-        </div>
+        <new-update @create="createManager" @refresh="getData"></new-update>
         <el-table :data="managerLists" style="width: 100%" v-loading="loading">
             <el-table-column label="管理员">
                 <template #default="{ row }">
@@ -99,6 +92,7 @@ import { notification } from '@/hooks/notice'
 import useManagerStore from '@/stores/modules/manager.js'
 import formDrawer from '@/components/formDrawer/formDrawer.vue';
 import ChooseImg from './cpns/choose-img.vue'
+import NewUpdate from '@/components/new-update/new-update.vue'
 
 const form = reactive({
     name: ''

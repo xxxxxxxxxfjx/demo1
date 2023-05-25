@@ -6,7 +6,7 @@
                     <el-col :span="6" style="padding:10px 10px">
                         <el-card :body-style="{ padding: '0px' }" shadow="hover" :class="{choose:item.checked}">
                             <el-image style="width: 100%; height: 150px;cursor:pointer" :src="item.url" fit="cover"
-                                :preview-src-list="[item.url]" :initial-index="0" />
+                                :preview-src-list="[item.url]" :initial-index="0" :z-index="10000"/>
                             <div class="box">
                                 <span class="text">{{ item.name }}</span>
                                 <div class="bottom">

@@ -1,13 +1,6 @@
 <template>
     <el-card shadow="never" class="card" v-loading="loading">
-        <div class="header">
-            <el-button type="primary" size="small" @click="createNotice">新增</el-button>
-            <el-button @click="getData">
-                <el-icon :size="20">
-                    <Refresh />
-                </el-icon>
-            </el-button>
-        </div>
+        <new-update @create="createNotice" @refresh="getData"></new-update>
         <el-table :data="notices" style="width: 100%">
             <el-table-column prop="title" label="公告标题" width="180" />
             <el-table-column prop="create_time" label="发布时间" width="600" />
@@ -41,6 +34,8 @@ import useNoticeStore from '@/stores/modules/notice';
 import { storeToRefs } from 'pinia';
 import FormDrawer from '@/components/formDrawer/formDrawer.vue';
 import { notification } from '@/hooks/notice'
+import NewUpdate from '@/components/new-update/new-update.vue'
+
 
 //TODO:公告模块中的高度存在bug，设置一个定死的高度
 const noticeStore = useNoticeStore();

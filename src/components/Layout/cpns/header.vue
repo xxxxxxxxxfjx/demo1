@@ -192,7 +192,7 @@ const asideClick = () => {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 1999;
 
     .logo {
         width: 250px;
