@@ -17,3 +17,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 app.use(useDirectives)
 app.use(router).use(pinia).mount('#app');
+console.log(app.config.globalProperties);

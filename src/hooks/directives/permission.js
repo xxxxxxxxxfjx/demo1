@@ -15,6 +15,7 @@ function hasAuth(el = false, arr) {
 export default function permission(app) {
     app.directive('permission', {
         mounted(el, bindings) {
+            console.log(el,bindings);
             hasAuth(el, bindings.value);
         },
     });

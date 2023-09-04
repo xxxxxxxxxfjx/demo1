@@ -18,6 +18,7 @@ const useUserInfo = defineStore('userInfo', {
             this.user = res;
             this.menus = res.menus;
             this.ruleName = res.ruleNames;
+            console.log(res);
             return res;
         },
         async fetchLogout() {
